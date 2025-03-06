@@ -1,0 +1,168 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #007bff;
+    margin-top: 20px;
+  }
+  
+  /* Login Page */
+  .login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e9ecef;
+  }
+  
+  .login-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  .login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .login-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Search Page */
+  .search-page {
+    padding: 20px;
+  }
+  
+  .search-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .search-filters select,
+  .search-filters input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .dog-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Dog Card */
+  .dog-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .dog-card img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .dog-card h2 {
+    margin: 10px 0;
+    font-size: 1.5em;
+  }
+  
+  .dog-card p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .dog-card button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .dog-card button:hover {
+    background-color: #218838;
+  }
+  
+  .dog-card button.remove {
+    background-color: #dc3545;
+  }
+  
+  .dog-card button.remove:hover {
+    background-color: #c82333;
+  }
+  
+  /* Favorites Page */
+  .favorites-page {
+    padding: 20px;
+  }
+  
+  .favorites-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Match Result */
+  .match-result {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .match-result img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .match-result h2 {
+    margin: 10px 0;
+    font-size: 1.5em;
+  }
+  
+  .match-result p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  /* Utility Classes */
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-20 {
+    margin-top: 20px;
+  }
+  
+  .mb-20 {
+    margin-bottom: 20px;
+  }
