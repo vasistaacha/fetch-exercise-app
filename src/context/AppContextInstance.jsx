@@ -6,8 +6,10 @@ export const AppContext = createContext({
   breeds: [],
   filterBreeds: [],
   favorites: [],
+  favoritesData: [],
+  dataLoading: false,
   filters: { ageMin: "", ageMax: "", sort: "breed:asc" },
-  cursorFrom: { prev: "", next: "", total: "" },
+  cursorFrom: { prev: "", next: "", total: "", currentPage: 1 },
   matchedDog: null,
 });
 

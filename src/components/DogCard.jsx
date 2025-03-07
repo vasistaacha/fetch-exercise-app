@@ -44,30 +44,30 @@ const DogCard = ({ dog, isFavorite, onFavorite }) => {
       <Card
         style={{
           maxWidth: 345,
-          height: 300, // Set a fixed height for the card
+          height: 400,
           margin: "16px",
           position: "relative",
-          transition: "0.3s", // Smooth transition for hover effect
+          transition: "0.3s",
           boxShadow: isFavorite
             ? "0 0 10px rgba(0, 255, 4, 0.5)"
-            : "0 0 5px rgba(0, 0, 0, 0.2)", // Shadow for favorite
+            : "0 0 5px rgba(0, 0, 0, 0.2)",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = "0 0 15px rgba(0, 72, 255, 0.53)"; // Glow effect on hover
+          e.currentTarget.style.boxShadow = "0 0 15px rgba(0, 72, 255, 0.53)";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.boxShadow = isFavorite
             ? "0 0 10px rgba(0, 255, 4, 0.5)"
-            : "0 0 5px rgba(0, 0, 0, 0.2)"; // Reset shadow
+            : "0 0 5px rgba(0, 0, 0, 0.2)";
         }}
       >
         <CardMedia
           component="img"
-          height="140"
+          height="210"
           image={dog.img}
           alt={dog.name}
-          onClick={handleClickOpen} // Open dialog on image click
-          style={{ cursor: "pointer" }} // Change cursor to pointer
+          onClick={handleClickOpen}
+          style={{ cursor: "pointer" }}
         />
         <CardContent>
           <Typography variant="h5">{dog.name}</Typography>
@@ -78,13 +78,13 @@ const DogCard = ({ dog, isFavorite, onFavorite }) => {
         <Button
           variant="contained"
           color={isFavorite ? "secondary" : "primary"}
-          onClick={handleFavoriteClick} // Updated click handler
+          onClick={handleFavoriteClick}
           style={{
             position: "absolute",
             bottom: "16px",
             left: "16px",
-            right: "16px", // Make the button stretch across the bottom
-          }} // Position the button at the bottom
+            right: "16px",
+          }}
         >
           {isFavorite ? "Remove Favorite" : "Add Favorite"}
         </Button>
@@ -110,7 +110,6 @@ const DogCard = ({ dog, isFavorite, onFavorite }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for displaying the message */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useAppContext } from "../context/AppContextInstance";
 import DogCard from "./DogCard";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, CircularProgress, Box } from "@mui/material";
 
 const FavoritesList = () => {
-  const { favorites, dispatch, fetchDogsWithID, favoritesData } =
+  const { favorites, dispatch, fetchDogsWithID, favoritesData, dataLoading } =
     useAppContext();
+
   useEffect(() => {
     fetchDogsWithID(favorites);
   }, [favorites, fetchDogsWithID]);
@@ -20,21 +21,43 @@ const FavoritesList = () => {
 
   return (
     <div>
-      <Typography variant="h1">Favorites</Typography>
-      {favoritesData.length > 0 ? (
-        <Grid container spacing={2}>
-          {favoritesData.map((dog) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={dog.id}>
-              <DogCard
-                dog={dog}
-                isFavorite={true}
-                onFavorite={handleFavorite}
-              />
-            </Grid>
-          ))}
-        </Grid>
+      {dataLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress />
+        </Box>
       ) : (
-        <Typography variant="body1">No favorites added yet.</Typography>
+        <>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            my={4}
+          >
+            <Typography variant="h4" component="h1" gutterBottom>
+              Favorites
+            </Typography>
+          </Box>
+          {favoritesData.length > 0 ? (
+            <Grid container spacing={2}>
+              {favoritesData.map((dog) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={dog.id}>
+                  <DogCard
+                    dog={dog}
+                    isFavorite={true}
+                    onFavorite={handleFavorite}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="body1">No favorites added yet.</Typography>
+          )}
+        </>
       )}
     </div>
   );

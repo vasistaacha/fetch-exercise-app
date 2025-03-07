@@ -20,7 +20,7 @@ const Pagination = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" my={2}>
       <Typography variant="body1" gutterBottom>
-        {`Total: ${cursorFrom.total.toLocaleString()}`}
+        {`Total: ${cursorFrom.total}`}
       </Typography>
       <Box display="flex" alignItems="center">
         <Button

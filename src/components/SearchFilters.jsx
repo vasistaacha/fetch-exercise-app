@@ -7,7 +7,7 @@ import {
   FormControl,
   InputLabel,
   Select as MuiSelect,
-  Grid,
+  Grid2,
 } from "@mui/material";
 
 const SearchFilters = () => {
@@ -59,24 +59,24 @@ const SearchFilters = () => {
           isMulti
           options={breeds.map((a) => ({ value: a, label: a }))}
           onChange={handleChange}
-          closeMenuOnSelect={false} // Keeps the menu open after selection
+          closeMenuOnSelect={false}
           placeholder="Select breeds..."
           styles={{
             control: (provided) => ({
               ...provided,
-              backgroundColor: "white", // Set background color to white
-              zIndex: 1000, // Ensure it appears above other elements
+              backgroundColor: "white",
+              zIndex: 1000,
             }),
             menu: (provided) => ({
               ...provided,
-              zIndex: 1000, // Ensure the dropdown menu appears above other elements
+              zIndex: 1000,
             }),
           }}
         />
       </FormControl>
 
-      <Grid container spacing={2} marginTop={2}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Grid2 container spacing={1} marginTop={1}>
+        <Grid2 xs={12} sm={6} md={3}>
           <TextField
             type="number"
             name="ageMin"
@@ -85,8 +85,8 @@ const SearchFilters = () => {
             fullWidth
             margin="normal"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <TextField
             type="number"
             name="ageMax"
@@ -95,8 +95,8 @@ const SearchFilters = () => {
             fullWidth
             margin="normal"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <FormControl fullWidth margin="normal">
             <InputLabel id="sortField-label">Sort By</InputLabel>
             <MuiSelect
@@ -107,7 +107,7 @@ const SearchFilters = () => {
               MenuProps={{
                 PaperProps: {
                   style: {
-                    zIndex: 1300, // Ensure the dropdown appears above other elements
+                    zIndex: 1300,
                   },
                 },
               }}
@@ -117,8 +117,8 @@ const SearchFilters = () => {
               <MenuItem value="age">Age</MenuItem>
             </MuiSelect>
           </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <FormControl fullWidth margin="normal">
             <InputLabel id="sortOrder-label">Sort Order</InputLabel>
             <MuiSelect
@@ -129,7 +129,7 @@ const SearchFilters = () => {
               MenuProps={{
                 PaperProps: {
                   style: {
-                    zIndex: 1300, // Ensure the dropdown appears above other elements
+                    zIndex: 1300,
                   },
                 },
               }}
@@ -138,8 +138,8 @@ const SearchFilters = () => {
               <MenuItem value="desc">Descending</MenuItem>
             </MuiSelect>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </>
   );
 };

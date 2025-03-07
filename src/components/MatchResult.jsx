@@ -6,17 +6,16 @@ import {
   Card,
   CardContent,
   CardMedia,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
 const MatchResult = () => {
-  const { matchedDog, generateMatch } = useAppContext();
+  const { matchedDog, generateMatch, dataLoading } = useAppContext();
 
-  // Call generateMatch when the component mounts
   useEffect(() => {
     generateMatch();
   }, [generateMatch]);
-
-  // Find the matched dog from the list of dogs
 
   return (
     <div
@@ -32,7 +31,7 @@ const MatchResult = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={generateMatch} // Ensure this is correctly set
+        onClick={generateMatch}
         style={{ marginBottom: "20px" }}
       >
         Generate New Match
@@ -40,7 +39,16 @@ const MatchResult = () => {
       <Typography variant="h4" gutterBottom>
         Your Match
       </Typography>
-      {matchedDog ? (
+      {dataLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress />
+        </Box>
+      ) : matchedDog ? (
         <Card style={{ width: "50%", maxHeight: "600px" }}>
           <CardMedia
             component="img"

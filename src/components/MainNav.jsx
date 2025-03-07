@@ -4,32 +4,32 @@ import { AppBar, Toolbar, Typography, Button, Snackbar } from "@mui/material";
 import { useAppContext } from "../context/AppContextInstance";
 
 export default function MainNav() {
-  const { user, logout, favorites } = useAppContext(); // Assuming favorites is part of your context
+  const { user, logout, favorites } = useAppContext();
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // State to control snackbar visibility
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout(user.name, user.email);
     navigate("/");
   };
 
-  const handleMatchClick = () => {
+  const handleMatchClick = (e) => {
     if (favorites.length === 0) {
-      setSnackbarOpen(true); // Show snackbar if no favorites are selected
-    } else {
-      navigate("/match"); // Navigate to match page if favorites exist
+      e.preventDefault(); // Prevent navigation if no favorites are selected
+      setSnackbarOpen(true); // Show snackbar
     }
+    // If favorites exist, NavLink will handle navigation
   };
 
   const handleSnackbarClose = () => {
-    setSnackbarOpen(false); // Close the snackbar
+    setSnackbarOpen(false);
   };
 
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          Dog Adoption App
+          Adopt a Dog
         </Typography>
 
         {user ? (
@@ -65,14 +65,20 @@ export default function MainNav() {
         >
           <Button color="inherit">Favorites</Button>
         </NavLink>
-        <Button color="inherit" onClick={handleMatchClick}>
-          Match
-        </Button>
+        <NavLink
+          to="/match"
+          style={({ isActive }) => ({
+            textDecoration: "none",
+            color: isActive ? "yellow" : "inherit",
+          })}
+          onClick={handleMatchClick} // Add onClick handler
+        >
+          <Button color="inherit">Match</Button>
+        </NavLink>
 
-        {/* Snackbar for no favorites selected */}
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={6000}
+          autoHideDuration={4000}
           onClose={handleSnackbarClose}
           message="Please select at least one favorite before proceeding to match."
         />

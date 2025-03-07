@@ -18,9 +18,6 @@ const SearchPage = () => {
 
   return (
     <Container>
-      <Typography variant="h1" gutterBottom>
-        Search Dogs
-      </Typography>
       <SearchFilters />
       <Grid container spacing={0}>
         {dogs.map((dog) => (

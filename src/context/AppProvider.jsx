@@ -3,7 +3,6 @@ import axios from "axios";
 import { AppContext } from "./AppContextInstance"; // Import the context from a separate file
 import { useNavigate, useLocation } from "react-router-dom";
 
-// Initial state
 const initialState = {
   user: null,
   dogs: [],
@@ -17,10 +16,9 @@ const initialState = {
   matchedDog: null,
 };
 
-// Reducer function
 const reducer = (state, action) => {
-  console.log(state);
-  console.log(action);
+  // console.log(state);
+  // console.log(action);
   switch (action.type) {
     case "SET_USER":
       return { ...state, user: action.payload };
@@ -141,7 +139,6 @@ export const AppProvider = ({ children }) => {
             withCredentials: true,
           }
         );
-        dispatch({ type: "SET_LOADING", payload: false });
         dispatch({
           type: "SET_FROM",
           payload: {
@@ -157,6 +154,7 @@ export const AppProvider = ({ children }) => {
           dogIds,
           { withCredentials: true }
         );
+        dispatch({ type: "SET_LOADING", payload: false });
         dispatch({ type: "SET_DOGS", payload: dogDetails.data });
       } catch (error) {
         console.error("Failed to fetch dogs:", error);
@@ -167,11 +165,13 @@ export const AppProvider = ({ children }) => {
 
   const fetchDogsWithID = useCallback(async (dogIds) => {
     try {
+      dispatch({ type: "SET_LOADING", payload: true });
       const dogDetails = await axios.post(
         "https://frontend-take-home-service.fetch.com/dogs",
         dogIds,
         { withCredentials: true }
       );
+      dispatch({ type: "SET_LOADING", payload: false });
       dispatch({ type: "ADD_FAVORITE_DATA", payload: dogDetails.data });
     } catch (error) {
       console.error("Failed to fetch dogs:", error);
@@ -180,6 +180,7 @@ export const AppProvider = ({ children }) => {
 
   const generateMatch = useCallback(async () => {
     try {
+      dispatch({ type: "SET_LOADING", payload: true });
       const response = await axios.post(
         "https://frontend-take-home-service.fetch.com/dogs/match",
         state.favorites,
@@ -190,6 +191,7 @@ export const AppProvider = ({ children }) => {
         [response.data.match],
         { withCredentials: true }
       );
+      dispatch({ type: "SET_LOADING", payload: false });
       dispatch({ type: "SET_MATCHED_DOG", payload: matchData.data[0] });
     } catch (error) {
       console.error("Failed to generate match:", error);
