@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback, useEffect } from "react";
 import axios from "axios";
 import { AppContext } from "./AppContextInstance"; // Import the context from a separate file
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Initial state
 const initialState = {
@@ -9,7 +10,10 @@ const initialState = {
   breeds: [],
   filterBreeds: [],
   favorites: [],
-  filters: { ageMin: "", ageMax: "", sort: "name:asc" },
+  favoritesData: [],
+  dataLoading: false,
+  filters: { ageMin: "", ageMax: "", sort: "breed:asc" },
+  cursorFrom: { prev: "", next: "", total: "", currentPage: 1 },
   matchedDog: null,
 };
 
@@ -22,10 +26,24 @@ const reducer = (state, action) => {
       return { ...state, user: action.payload };
     case "SET_DOGS":
       return { ...state, dogs: action.payload };
+    case "SET_LOADING":
+      return { ...state, dataLoading: action.payload };
     case "SET_BREEDS":
       return {
         ...state,
         breeds: [...action.payload],
+      };
+    case "SET_FROM":
+      return {
+        ...state,
+        cursorFrom: {
+          prev: action.payload.prev,
+          next: action.payload.next,
+          total: action.payload.total,
+          currentPage: action.payload.pageNo
+            ? state.cursorFrom.currentPage + action.payload.pageNo
+            : 1,
+        },
       };
     case "FILTER_BREEDS":
       return {
@@ -36,6 +54,8 @@ const reducer = (state, action) => {
       return { ...state, filters: action.payload };
     case "ADD_FAVORITE":
       return { ...state, favorites: [...state.favorites, action.payload] };
+    case "ADD_FAVORITE_DATA":
+      return { ...state, favoritesData: [...action.payload] };
     case "REMOVE_FAVORITE":
       return {
         ...state,
@@ -51,6 +71,13 @@ const reducer = (state, action) => {
 // Context provider component
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate(); // Hook for navigation
+  const location = useLocation(); // Hook to access the current location
+  useEffect(() => {
+    if (!state.user && location.pathname != "/") {
+      navigate("");
+    }
+  }, [state.user, navigate, location]);
 
   const login = async (name, email) => {
     try {
@@ -98,47 +125,84 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const fetchDogs = useCallback(async () => {
+  const fetchDogs = useCallback(
+    async (cursor = 0, pageNo = undefined) => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+        const response = await axios.get(
+          "https://frontend-take-home-service.fetch.com/dogs/search",
+          {
+            params: {
+              ...state.filters,
+              breeds: state.filterBreeds,
+              size: 25,
+              from: cursor,
+            },
+            withCredentials: true,
+          }
+        );
+        dispatch({ type: "SET_LOADING", payload: false });
+        dispatch({
+          type: "SET_FROM",
+          payload: {
+            prev: response.data.prev?.split("from=")[1],
+            next: response.data.next?.split("from=")[1],
+            total: response.data.total,
+            pageNo,
+          },
+        });
+        const dogIds = response.data.resultIds;
+        const dogDetails = await axios.post(
+          "https://frontend-take-home-service.fetch.com/dogs",
+          dogIds,
+          { withCredentials: true }
+        );
+        dispatch({ type: "SET_DOGS", payload: dogDetails.data });
+      } catch (error) {
+        console.error("Failed to fetch dogs:", error);
+      }
+    },
+    [state.filters, state.filterBreeds]
+  );
+
+  const fetchDogsWithID = useCallback(async (dogIds) => {
     try {
-      const response = await axios.get(
-        "https://frontend-take-home-service.fetch.com/dogs/search",
-        {
-          params: { ...state.filters, breeds: state.filterBreeds, size: 25 },
-          withCredentials: true,
-        }
-      );
-      const dogIds = response.data.resultIds;
       const dogDetails = await axios.post(
         "https://frontend-take-home-service.fetch.com/dogs",
         dogIds,
         { withCredentials: true }
       );
-      dispatch({ type: "SET_DOGS", payload: dogDetails.data });
+      dispatch({ type: "ADD_FAVORITE_DATA", payload: dogDetails.data });
     } catch (error) {
       console.error("Failed to fetch dogs:", error);
     }
-  }, [state.filters, state.filterBreeds]);
+  }, []);
 
-  const generateMatch = async () => {
+  const generateMatch = useCallback(async () => {
     try {
       const response = await axios.post(
         "https://frontend-take-home-service.fetch.com/dogs/match",
         state.favorites,
         { withCredentials: true }
       );
-      dispatch({ type: "SET_MATCHED_DOG", payload: response.data.match });
+      const matchData = await axios.post(
+        "https://frontend-take-home-service.fetch.com/dogs",
+        [response.data.match],
+        { withCredentials: true }
+      );
+      dispatch({ type: "SET_MATCHED_DOG", payload: matchData.data[0] });
     } catch (error) {
       console.error("Failed to generate match:", error);
     }
-  };
+  }, [state.favorites]);
 
   useEffect(() => {
     state.user && fetchBreeds();
   }, [state.user]);
 
   useEffect(() => {
-    fetchDogs();
-  }, [fetchDogs]);
+    state.user && fetchDogs();
+  }, [state.user, fetchDogs]);
 
   return (
     <AppContext.Provider
@@ -148,6 +212,8 @@ export const AppProvider = ({ children }) => {
         logout,
         dispatch,
         generateMatch,
+        fetchDogs,
+        fetchDogsWithID,
       }}
     >
       {children}

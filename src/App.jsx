@@ -9,8 +9,10 @@ import { AppProvider } from "./context/AppProvider";
 import LoginPage from "./pages/LoginPage";
 import SearchPage from "./pages/SearchPage";
 import FavoritesPage from "./pages/FavoritesPage";
+import MatchPage from "./pages/MatchPage";
 import ErrorPage from "./pages/ErrorPage";
 import MainNav from "./components/MainNav";
+
 const Layout = () => {
   return (
     <AppProvider>
@@ -40,13 +42,18 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "search",
+        path: "/search",
         element: <SearchPage />,
         errorElement: <ErrorPage />,
       },
       {
-        path: "favorites",
+        path: "/favorites",
         element: <FavoritesPage />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/match",
+        element: <MatchPage />,
         errorElement: <ErrorPage />,
       },
     ],

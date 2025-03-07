@@ -4,8 +4,10 @@ export const AppContext = createContext({
   user: null,
   dogs: [],
   breeds: [],
+  filterBreeds: [],
   favorites: [],
-  filters: { breed: "", ageMin: "", ageMax: "" },
+  filters: { ageMin: "", ageMax: "", sort: "breed:asc" },
+  cursorFrom: { prev: "", next: "", total: "" },
   matchedDog: null,
 });
 

@@ -6,7 +6,6 @@ const FavoritesPage = () => {
   return (
     <div>
       <FavoritesList />
-      <MatchResult />
     </div>
   );
 };

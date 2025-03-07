@@ -1,25 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppContext } from "../context/AppContextInstance";
+import {
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  CardMedia,
+} from "@mui/material";
 
 const MatchResult = () => {
-  const { matchedDog, dogs, generateMatch } = useAppContext();
+  const { matchedDog, generateMatch } = useAppContext();
+
+  // Call generateMatch when the component mounts
+  useEffect(() => {
+    generateMatch();
+  }, [generateMatch]);
 
   // Find the matched dog from the list of dogs
-  const matchedDogDetails = dogs.find((dog) => dog.id === matchedDog);
 
   return (
-    <div>
-      <button onClick={generateMatch}>Generate Match</button>
-      <h1>Your Match</h1>
-      {matchedDogDetails ? (
-        <div>
-          <img src={matchedDogDetails.img} alt={matchedDogDetails.name} />
-          <h2>{matchedDogDetails.name}</h2>
-          <p>Breed: {matchedDogDetails.breed}</p>
-          <p>Age: {matchedDogDetails.age}</p>
-        </div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        height: "100vh",
+        padding: "20px",
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={generateMatch} // Ensure this is correctly set
+        style={{ marginBottom: "20px" }}
+      >
+        Generate New Match
+      </Button>
+      <Typography variant="h4" gutterBottom>
+        Your Match
+      </Typography>
+      {matchedDog ? (
+        <Card style={{ width: "50%", maxHeight: "600px" }}>
+          <CardMedia
+            component="img"
+            height="300"
+            image={matchedDog.img}
+            alt={matchedDog.name}
+            style={{ objectFit: "cover" }}
+          />
+          <CardContent>
+            <Typography variant="h5">{matchedDog.name}</Typography>
+            <Typography variant="body1">Breed: {matchedDog.breed}</Typography>
+            <Typography variant="body1">Age: {matchedDog.age}</Typography>
+            <Typography variant="body1">
+              Zip Code: {matchedDog.zip_code}
+            </Typography>
+          </CardContent>
+        </Card>
       ) : (
-        <p>No match found.</p>
+        <Typography variant="body1" style={{ textAlign: "center" }}>
+          No match found.
+        </Typography>
       )}
     </div>
   );

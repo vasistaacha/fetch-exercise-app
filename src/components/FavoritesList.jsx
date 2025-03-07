@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppContext } from "../context/AppContextInstance";
 import DogCard from "./DogCard";
+import { Grid, Typography } from "@mui/material";
 
 const FavoritesList = () => {
-  const { favorites, dogs, dispatch } = useAppContext();
-  console.log(useAppContext());
-  const favoritedDogs = dogs.filter((dog) => favorites.includes(dog.id));
+  const { favorites, dispatch, fetchDogsWithID, favoritesData } =
+    useAppContext();
+  useEffect(() => {
+    fetchDogsWithID(favorites);
+  }, [favorites, fetchDogsWithID]);
+
   const handleFavorite = (dogId) => {
     if (favorites.includes(dogId)) {
       dispatch({ type: "REMOVE_FAVORITE", payload: dogId });
@@ -16,18 +20,21 @@ const FavoritesList = () => {
 
   return (
     <div>
-      <h1>Favorites</h1>
-      {favoritedDogs.length > 0 ? (
-        favoritedDogs.map((dog) => (
-          <DogCard
-            key={dog.id}
-            dog={dog}
-            isFavorite={true}
-            onFavorite={handleFavorite}
-          />
-        ))
+      <Typography variant="h1">Favorites</Typography>
+      {favoritesData.length > 0 ? (
+        <Grid container spacing={2}>
+          {favoritesData.map((dog) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={dog.id}>
+              <DogCard
+                dog={dog}
+                isFavorite={true}
+                onFavorite={handleFavorite}
+              />
+            </Grid>
+          ))}
+        </Grid>
       ) : (
-        <p>No favorites added yet.</p>
+        <Typography variant="body1">No favorites added yet.</Typography>
       )}
     </div>
   );
